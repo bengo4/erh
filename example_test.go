@@ -7,11 +7,11 @@ import (
 )
 
 func ExampleCause() {
-	cause := fmt.Errorf("something wrong")
-	err := erh.Wrap(cause)
+	err0 := fmt.Errorf("something wrong")
+	err1 := erh.Wrap(err0)
 
-	fmt.Println(erh.Cause(cause) == cause)
-	fmt.Println(erh.Cause(err) == cause)
+	fmt.Println(erh.Cause(err0) == err0)
+	fmt.Println(erh.Cause(err1) == err0)
 	// Output:
 	// true
 	// true
@@ -24,9 +24,9 @@ func ExampleErrorf() {
 }
 
 func ExampleWrap() {
-	cause := fmt.Errorf("something wrong")
-	err := erh.Wrap(cause)
-	fmt.Println(err)
+	err0 := fmt.Errorf("something wrong")
+	err1 := erh.Wrap(err0)
+	fmt.Println(err1)
 	// Output: something wrong[example_test.go:28]
 }
 
@@ -44,8 +44,8 @@ func ExampleWrap_message() {
 }
 
 func ExampleWrap_messageFormatted() {
-	cause := fmt.Errorf("something wrong")
-	err := erh.Wrap(cause, "additional message, p:%d", 123)
-	fmt.Println(err)
+	err0 := fmt.Errorf("something wrong")
+	err1 := erh.Wrap(err0, "additional message, p:%d", 123)
+	fmt.Println(err1)
 	// Output: additional message, p:123; something wrong[example_test.go:48]
 }
