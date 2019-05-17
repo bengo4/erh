@@ -68,7 +68,7 @@ If the original error is `nil`, `erh.Wrap(nil)` returns `nil`.
 
 ## Cause
 
-The `erh.Cause` function regain the original error from the one wrapped by `erh.Wrap`.
+The `erh.Cause` function regains the original error from the one wrapped by `erh.Wrap`.
 
 ```
 func main() {
@@ -88,7 +88,7 @@ open file-not-exists: no such file or directory
 
 ## Errorf
 
-With `erh.Errorf`, you can create a new error with a message containing the short filename and the line number of the place where `erh.Errorf` is used.
+With the `erh.Errorf`, you can create a new error with a message containing the short filename and the line number of the place where `erh.Errorf` is used.
 
 ```
 func main() {
