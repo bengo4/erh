@@ -17,7 +17,7 @@ To solve this problem, the `erh` package provides functions below, similar to [p
 
 ## Wrap
 
-The `erh.Wrap` function create a new error based on the original error. 
+The `erh.Wrap` function creates a new error based on the original error. 
 
 You can add the short filename and the line number of the place where `erh.Wrap` is used to the original error message.
 
