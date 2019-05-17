@@ -34,7 +34,7 @@ result:
 open file-not-exists: no such file or directory[main.go:12]
 ```
 
-It can also add an extra message like below.
+It is also possible to add an extra message like below.
 
 ```
 func main() {
