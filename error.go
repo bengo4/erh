@@ -5,10 +5,12 @@ import (
 	"fmt"
 )
 
-// Errorf returns an error that formats according to a format specifier and adds the point it was called.
-func Errorf(f string, a ...interface{}) error {
+// Errorf returns a new error with a formatted message accordings to a format specifier.
+//
+// Additionally, the message of the returned error includes the short filename and the line number of the place where Errorf is called.
+func Errorf(format string, a ...interface{}) error {
 	buf := new(bytes.Buffer)
-	fmt.Fprintf(buf, f, a...)
+	fmt.Fprintf(buf, format, a...)
 	addFileLine(buf)
 	return fmt.Errorf(buf.String())
 }
