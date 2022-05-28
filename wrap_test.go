@@ -16,25 +16,42 @@ func TestWrapNil(t *testing.T) {
 }
 
 func TestWrap(t *testing.T) {
-	assert := assert.New(t)
-
-	e := fmt.Errorf("first")
-	e0 := erh.Wrap(e)
-	e1 := erh.Wrap(e0, "one")
-	e2 := erh.Wrap(e1, "two, x:%s:%d", "y", 123)
+	e0 := fmt.Errorf("first")
+	e1 := erh.Wrap(e0)                                             // LINE: 20
+	e2 := erh.Wrap(e1, "simple message")                           // LINE: 21
+	e3 := erh.Wrap(e2, "formatted with params, x:%s:%d", "y", 123) // LINE: 22
 
 	tests := []struct {
+		name string
 		err  error
 		want string
 	}{
-		{e, "first"},
-		{e0, "first[wrap_test.go:22]"},
-		{e1, "one; first[wrap_test.go:22][wrap_test.go:23]"},
-		{e2, "two, x:y:123; one; first[wrap_test.go:22][wrap_test.go:23][wrap_test.go:24]"},
+		{
+			name: "not wrapped",
+			err:  e0,
+			want: "first",
+		},
+		{
+			name: "wrapped 1x",
+			err:  e1,
+			want: "first[wrap_test.go:20]",
+		},
+		{
+			name: "wrapped 2x",
+			err:  e2,
+			want: "simple message; first[wrap_test.go:20][wrap_test.go:21]",
+		},
+		{
+			name: "wrapped 3x",
+			err:  e3,
+			want: "formatted with params, x:y:123; simple message; first[wrap_test.go:20][wrap_test.go:21][wrap_test.go:22]",
+		},
 	}
-
 	for i, tt := range tests {
-		assert.Equal(tt.want, tt.err.Error(), "i:%d", i)
-		assert.Equal(e, erh.Cause(tt.err), "i:%d", i)
+		t.Run(fmt.Sprintf("%d:%s", i, tt.name), func(t *testing.T) {
+			assert := assert.New(t)
+			assert.Equal(tt.want, tt.err.Error(), "i:%d", i)
+			assert.Equal(e0, erh.Cause(tt.err), "i:%d", i)
+		})
 	}
 }
