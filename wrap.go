@@ -6,17 +6,18 @@ import (
 	"fmt"
 )
 
-// Wrap returns a new error based on err.
+// Wrap returns a new error which wraps err.
 //
-// Wrap formats an error message with wrapping err.
+// A message acording to the format specifier can be added to the returned error.
 //
-// Wrap also add the short filename and the line number of the place where Wrap is called to the error message.
-//
-// The err wrapped by Wrap can be retrieved by errors.Unwrap.
-//
-// The very first error of repeatedly wrapped errors can retrieved by Cause.
+// The error message of the new error also includes the short filename and the line number of the place where Wrap is called.
 //
 // If err is nil, Wrap returns nil.
+//
+// The err wrapped by Wrap can be retrieved by errors.Unwrap. So errors.Is can be used with Wrap.
+//
+// The very first error of repeatedly wrapped errors can be retrieved by Cause.
+//
 func Wrap(err error, a ...interface{}) error {
 	if err == nil {
 		return nil
