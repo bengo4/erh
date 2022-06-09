@@ -17,13 +17,15 @@ func TestErrorf(t *testing.T) {
 	}{
 		{
 			name:   "with a format string only",
-			format: "test error", a: nil,
-			want: "test error[error_test.go:33]",
+			format: "test error",
+			a:      nil,
+			want:   "test error[error_test.go:35]",
 		},
 		{
 			name:   "with a format string and an argument",
-			format: "test error, p:%d", a: []interface{}{314},
-			want: "test error, p:314[error_test.go:33]",
+			format: "test error, p:%d",
+			a:      []interface{}{314},
+			want:   "test error, p:314[error_test.go:35]",
 		},
 	}
 
