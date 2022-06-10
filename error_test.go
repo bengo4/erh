@@ -1,33 +1,39 @@
-package erh
+package erh_test
 
 import (
+	"fmt"
 	"testing"
 
+	"github.com/bengo4/erh"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestErrorf(t *testing.T) {
-	assert := assert.New(t)
-
 	tests := []struct {
-		f    string
-		a    []interface{}
-		want string
+		name   string
+		format string
+		a      []interface{}
+		want   string
 	}{
 		{
-			"test error",
-			nil,
-			"test error[error_test.go:30]",
+			name:   "with a format string only",
+			format: "test error",
+			a:      nil,
+			want:   "test error[error_test.go:35]",
 		},
 		{
-			"test error, p:%d",
-			[]interface{}{314},
-			"test error, p:314[error_test.go:30]",
+			name:   "with a format string and an argument",
+			format: "test error, p:%d",
+			a:      []interface{}{314},
+			want:   "test error, p:314[error_test.go:35]",
 		},
 	}
 
 	for i, tt := range tests {
-		err := Errorf(tt.f, tt.a...) // this is LINE:30
-		assert.Equal(tt.want, err.Error(), "i:%d", i)
+		t.Run(fmt.Sprintf("%d:%s", i, tt.name), func(t *testing.T) {
+			assert := assert.New(t)
+			err := erh.Errorf(tt.format, tt.a...) // this is LINE:35
+			assert.Equal(tt.want, err.Error())
+		})
 	}
 }

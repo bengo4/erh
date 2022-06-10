@@ -2,7 +2,7 @@
 Simple Error Handling Functions for Go.
 
 ```
-go get github.com/bengo4/erh
+go get github.com/bengo4/erh@latest
 
 import "github.com/bengo4/erh"
 ```
@@ -65,6 +65,10 @@ read failed, version:1; open file-not-exists: no such file or directory[main.go:
 ```
 
 If the original error is `nil`, `erh.Wrap(nil)` returns `nil`.
+
+The error wrapped by Wrap can be retrieved by errors.Unwrap. So errors.Is can be used with Wrap.
+
+The very first error of repeatedly wrapped errors can be retrieved by Cause.
 
 ## Cause
 

@@ -2,12 +2,22 @@ package erh
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 )
 
-// Wrap returns an error that formats as err with the point Wrap is called, and the supplied message.
-// Wrap also records the cause of err.
+// Wrap returns a new error which wraps err.
+//
+// A message acording to the format specifier can be added to the returned error.
+//
+// The error message of the new error also includes the short filename and the line number of the place where Wrap is called.
+//
 // If err is nil, Wrap returns nil.
+//
+// The err wrapped by Wrap can be retrieved by errors.Unwrap. So errors.Is can be used with Wrap.
+//
+// The very first error of repeatedly wrapped errors can be retrieved by Cause.
+//
 func Wrap(err error, a ...interface{}) error {
 	if err == nil {
 		return nil
@@ -18,46 +28,21 @@ func Wrap(err error, a ...interface{}) error {
 		format := fmt.Sprintf("%v; ", a[0])
 		fmt.Fprintf(buf, format, a[1:]...)
 	}
-	buf.WriteString(err.Error())
+	buf.WriteString("%w")
 	addFileLine(buf)
-
-	return &wrap{
-		cause: Cause(err),
-		msg:   buf.String(),
-	}
+	return fmt.Errorf(buf.String(), err)
 }
 
-// Cause returns the underlying cause of the error, if possible.
+// Cause returns the very first error of repeatedly wrapped errors.
 //
-// This is same thing as github.com/pkg/errors.Cause() (https://github.com/pkg/errors)
+// This works like github.com/pkg/errors.Cause (https://github.com/pkg/errors)
 func Cause(err error) error {
-	type causer interface {
-		Cause() error
+	for {
+		err2 := errors.Unwrap(err)
+		if err2 == nil {
+			return err
+		}
+
+		err = err2
 	}
-
-	if err == nil {
-		return nil
-	}
-
-	c, ok := err.(causer)
-	if !ok {
-		return err
-	}
-
-	return c.Cause()
-}
-
-type wrap struct {
-	cause error
-	msg   string
-}
-
-// Error
-func (w *wrap) Error() string {
-	return w.msg
-}
-
-// Cause
-func (w *wrap) Cause() error {
-	return w.cause
 }
