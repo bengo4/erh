@@ -3,6 +3,8 @@ package erh_test
 import (
 	"errors"
 	"fmt"
+	"io/fs"
+	"os"
 
 	"github.com/bengo4/erh"
 )
@@ -23,7 +25,7 @@ func ExampleCause() {
 func ExampleErrorf() {
 	err := erh.Errorf("something wrong")
 	fmt.Println(err)
-	// Output: something wrong[example_test.go:24]
+	// Output: something wrong[example_test.go:26]
 }
 
 func ExampleWrap() {
@@ -33,8 +35,8 @@ func ExampleWrap() {
 	fmt.Println(err1)
 	fmt.Println(err2)
 	// Output:
-	// something wrong[example_test.go:31]
-	// something wrong[example_test.go:31][example_test.go:32]
+	// something wrong[example_test.go:33]
+	// something wrong[example_test.go:33][example_test.go:34]
 }
 
 func ExampleWrap_nil() {
@@ -50,15 +52,15 @@ func ExampleWrap_message() {
 	fmt.Println(err1)
 	fmt.Println(err2)
 	// Output:
-	// wrapped; something wrong[example_test.go:48]
-	// wrapped again; wrapped; something wrong[example_test.go:48][example_test.go:49]
+	// wrapped; something wrong[example_test.go:50]
+	// wrapped again; wrapped; something wrong[example_test.go:50][example_test.go:51]
 }
 
 func ExampleWrap_messageFormatted() {
 	err0 := fmt.Errorf("something wrong")
 	err1 := erh.Wrap(err0, "additional message, p:%d", 123)
 	fmt.Println(err1)
-	// Output: additional message, p:123; something wrong[example_test.go:59]
+	// Output: additional message, p:123; something wrong[example_test.go:61]
 }
 
 func ExampleWrap_unwrap() {
@@ -85,4 +87,28 @@ func ExampleWrap_is() {
 	// true
 	// true
 	// true
+}
+
+func ExampleAs() {
+	_, err0 := os.Open("non-existing")
+	err1 := erh.Wrap(err0)
+	// target1 will be unwrapped to err0 which is *fs.PathError.
+	target1, ok := erh.As[*fs.PathError](err1)
+	fmt.Println("target1:", ok)
+	fmt.Println("target1:", target1)
+	// target2 will not be unwrapped because err1 matches to error interface.
+	target2, ok := erh.As[error](err1)
+	fmt.Println("target2:", ok)
+	fmt.Println("target2:", target2)
+	// target3 will be nil because both err1 and err0 do not match to *os.LinkError.
+	target3, ok := erh.As[*os.LinkError](err1)
+	fmt.Println("target3:", ok)
+	fmt.Println("target3:", target3)
+	// Output:
+	// target1: true
+	// target1: open non-existing: no such file or directory
+	// target2: true
+	// target2: open non-existing: no such file or directory[example_test.go:94]
+	// target3: false
+	// target3: <nil>
 }

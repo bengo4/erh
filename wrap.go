@@ -14,10 +14,9 @@ import (
 //
 // If err is nil, Wrap returns nil.
 //
-// The err wrapped by Wrap can be retrieved by errors.Unwrap. So errors.Is can be used with Wrap.
+// The err wrapped by Wrap can be retrieved by errors.Unwrap. So [errors.Is] can be used with Wrap.
 //
 // The very first error of repeatedly wrapped errors can be retrieved by Cause.
-//
 func Wrap(err error, a ...interface{}) error {
 	if err == nil {
 		return nil
@@ -35,7 +34,7 @@ func Wrap(err error, a ...interface{}) error {
 
 // Cause returns the very first error of repeatedly wrapped errors.
 //
-// This works like github.com/pkg/errors.Cause (https://github.com/pkg/errors)
+// This works like [pkg/errors.Cause].
 func Cause(err error) error {
 	for {
 		err2 := errors.Unwrap(err)
