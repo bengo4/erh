@@ -28,11 +28,11 @@ func TestAs(t *testing.T) {
 	t.Run("erh.As[*os.LinkError](errObject)", testAsNoMatch[*os.LinkError](errObject))
 	t.Run("erh.As[*os.LinkError](errWrappedObject)", testAsNoMatch[*os.LinkError](errWrappedObject))
 
-	t.Run("erh.As[error](nil)", testAsNoMatch[error](nil))
-	t.Run("erh.As[error](errPathError)", testAsMatchTo[error](errPathError, errPathError))
-	t.Run("erh.As[error](errWrapped)", testAsMatchTo[error](errWrapped, errWrapped))
-	t.Run("erh.As[error](errObject)", testAsMatchTo[error](errObject, errObject))
-	t.Run("erh.As[error](errWrappedObject)", testAsMatchTo[error](errWrappedObject, errWrappedObject))
+	t.Run("erh.As[myE](nil)", testAsNoMatch[myE](nil))
+	t.Run("erh.As[myE](errPathError)", testAsMatchTo[myE](errPathError, errPathError))
+	t.Run("erh.As[myE](errWrapped)", testAsMatchTo[myE](errWrapped, errWrapped))
+	t.Run("erh.As[myE](errObject)", testAsMatchTo[myE](errObject, errObject))
+	t.Run("erh.As[myE](errWrappedObject)", testAsMatchTo[myE](errWrappedObject, errWrappedObject))
 
 	t.Run("erh.As[*wrapError](nil)", testAsNoMatch[*wrapError](nil))
 	t.Run("erh.As[*wrapError](errPathError)", testAsNoMatch[*wrapError](errPathError))
@@ -81,6 +81,11 @@ func assertErrorMatchTo[T error](want error) func(t *testing.T, target T, ok boo
 			}
 		}
 	}
+}
+
+// myE is an interface compatible with error.
+type myE interface {
+	error
 }
 
 // wrapError is an wrapped error for testing.
