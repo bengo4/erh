@@ -16,11 +16,11 @@ import "errors"
 //
 // The code above is equivalent to the code below:
 //
-//	 var (
+//	var (
 //		target *fs.PathError
 //		_      error = target
-//	 )
-//	 ok := errors.As(err, &target)
+//	)
+//	ok := errors.As(err, &target)
 func As[T error](err error) (T, bool) {
 	var target T
 	ok := errors.As(err, &target)
