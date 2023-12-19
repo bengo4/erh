@@ -7,13 +7,15 @@ go get github.com/bengo4/erh@latest
 import "github.com/bengo4/erh"
 ```
 
-As is often the case with the `error` built-in interface, an `error` returned from a nested function, and it may be difficult for you to find the birth place or the pathway of the `error`.
+When an `error` returned from a nested function, it may be difficult for you to find the birth place or the pathway of the `error`.
 
-To solve this problem, the `erh` package provides functions below, similar to [pkg/errors](https://github.com/pkg/errors):
+To solve this problem, the `erh` package provides functions below, similar to [github.com/pkg/errors](https://github.com/pkg/errors):
 
-* Wrap
-* Cause
-* Errorf
+* `Wrap`
+* `Cause`
+* `Errorf`
+
+Also `erh` provides function `As`, a wrapper of [errors.As](https://pkg.go.dev/errors#As).
 
 ## Wrap
 
@@ -104,3 +106,24 @@ results:
 ```
 something wrong, version:1[main.go:10]
 ```
+
+## As
+
+The function `erh.As` is a wrapper of [errors.As](https://pkg.go.dev/errors#As).
+
+An example of using `erh.As` is below.
+
+```go
+target, ok := erh.As[*fs.PathError](err)
+```
+
+This is equivalent to the following code.
+
+```go
+var (
+    target *fs.PathError
+    _      error = target
+)
+ok := errors.As(err, &target)
+```
+
