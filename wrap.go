@@ -34,7 +34,7 @@ func Wrap(err error, a ...interface{}) error {
 
 // Cause returns the very first error of repeatedly wrapped errors.
 //
-// This works like [pkg/errors.Cause].
+// This works like https://pkg.go.dev/github.com/pkg/errors#Cause.
 func Cause(err error) error {
 	for {
 		err2 := errors.Unwrap(err)

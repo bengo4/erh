@@ -9,7 +9,7 @@ import "github.com/bengo4/erh"
 
 When an `error` returned from a nested function, it may be difficult for you to find the birth place or the pathway of the `error`.
 
-To solve this problem, the `erh` package provides functions below, similar to [pkg/errors](https://github.com/pkg/errors):
+To solve this problem, the `erh` package provides functions below, similar to [github.com/pkg/errors](https://github.com/pkg/errors):
 
 * `Wrap`
 * `Cause`
