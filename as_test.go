@@ -16,6 +16,7 @@ func TestAs(t *testing.T) {
 	errWrapped := &wrapError{msg: "wrapped", err: errPathError}
 	errObject := objectError{msg: "object error"}
 	errWrappedObject := &wrapError{msg: "wrapped", err: errObject}
+
 	t.Run("erh.As[*fs.PathError](nil)", testAsNoMatch[*fs.PathError](nil))
 	t.Run("erh.As[*fs.PathError](errPathError)", testAsMatchTo[*fs.PathError](errPathError, errPathError))
 	t.Run("erh.As[*fs.PathError](errWrapped)", testAsMatchTo[*fs.PathError](errWrapped, errPathError))
@@ -39,6 +40,18 @@ func TestAs(t *testing.T) {
 	t.Run("erh.As[*wrapError](errWrapped)", testAsMatchTo[*wrapError](errWrapped, errWrapped))
 	t.Run("erh.As[*wrapError](errObject)", testAsNoMatch[*wrapError](errObject))
 	t.Run("erh.As[*wrapError](errWrappedObject)", testAsMatchTo[*wrapError](errWrappedObject, errWrappedObject))
+
+	t.Run("erh.As[objectError](nil)", testAsNoMatch[objectError](nil))
+	t.Run("erh.As[objectError](errPathError)", testAsNoMatch[objectError](errPathError))
+	t.Run("erh.As[objectError](errWrapped)", testAsNoMatch[objectError](errWrapped))
+	t.Run("erh.As[objectError](errObject)", testAsMatchTo[objectError](errObject, errObject))
+	t.Run("erh.As[objectError](errWrappedObject)", testAsMatchTo[objectError](errWrappedObject, errObject))
+
+	t.Run("erh.As[*objectError](nil)", testAsNoMatch[*objectError](nil))
+	t.Run("erh.As[*objectError](errPathError)", testAsNoMatch[*objectError](errPathError))
+	t.Run("erh.As[*objectError](errWrapped)", testAsNoMatch[*objectError](errWrapped))
+	t.Run("erh.As[*objectError](errObject)", testAsNoMatch[*objectError](errObject))
+	t.Run("erh.As[*objectError](errWrappedObject)", testAsNoMatch[*objectError](errWrappedObject))
 }
 
 func testAsNoMatch[T error](err error) func(t *testing.T) {
