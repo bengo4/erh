@@ -11,7 +11,7 @@ import (
 )
 
 func TestErrorf(t *testing.T) {
-	const wantLineNum = "71"
+	const wantLineNum = "85"
 	tests := []struct {
 		name     string
 		dirDepth int32
@@ -44,6 +44,20 @@ func TestErrorf(t *testing.T) {
 			format:   "test error, p:%d",
 			a:        []any{314},
 			reWant:   `^test error, p:314\[erh/error_test.go:` + wantLineNum + `\]$`,
+		},
+		{
+			name:     "dirDepth==100,with a format string only",
+			dirDepth: 100,
+			format:   "test error",
+			a:        nil,
+			reWant:   `^test error\[/.*/erh/error_test.go:` + wantLineNum + `\]$`,
+		},
+		{
+			name:     "dirDepth==100,with a format string and an argument",
+			dirDepth: 100,
+			format:   "test error, p:%d",
+			a:        []any{314},
+			reWant:   `^test error, p:314\[/.*/erh/error_test.go:` + wantLineNum + `\]$`,
 		},
 		{
 			name:     "dirDepth==FullPath,with a format string only",

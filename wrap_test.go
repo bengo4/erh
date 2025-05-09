@@ -104,6 +104,33 @@ func TestWrap_DirDepth(t *testing.T) {
 			reWant: `^formatted with params, x:y:123; simple message; first\[erh/wrap_test.go:\d+\]\[erh/wrap_test.go:\d+\]\[erh/wrap_test.go:\d+\]$`,
 		},
 		{
+			name:     "dirDepth==100&wrapped 1x",
+			dirDepth: 100,
+			wrap: func() error {
+				return erh.Wrap(e0)
+			},
+			reWant: `^first\[/.*/erh/wrap_test.go:\d+\]$`,
+		},
+		{
+			name:     "dirDepth==100&wrapped 2x",
+			dirDepth: 100,
+			wrap: func() error {
+				e1 := erh.Wrap(e0)
+				return erh.Wrap(e1, "simple message")
+			},
+			reWant: `^simple message; first\[/.*/erh/wrap_test.go:\d+\]\[/.*/erh/wrap_test.go:\d+\]$`,
+		},
+		{
+			name:     "dirDepth==100&wrapped 3x",
+			dirDepth: 100,
+			wrap: func() error {
+				e1 := erh.Wrap(e0)
+				e2 := erh.Wrap(e1, "simple message")
+				return erh.Wrap(e2, "formatted with params, x:%s:%d", "y", 123)
+			},
+			reWant: `^formatted with params, x:y:123; simple message; first\[/.*/erh/wrap_test.go:\d+\]\[/.*/erh/wrap_test.go:\d+\]\[/.*/erh/wrap_test.go:\d+\]$`,
+		},
+		{
 			name:     "dirDepth==FullPath&wrapped 1x",
 			dirDepth: erh.FullPath,
 			wrap: func() error {
