@@ -9,4 +9,6 @@
 //   - [Errorf]
 //
 // Also erh provides function [As], a wrapper of [errors.As].
+//
+// The directory depth of the source file recorded in error messages can be changed by SetSourceDirectoryDepth.
 package erh

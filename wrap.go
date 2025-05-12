@@ -1,9 +1,9 @@
 package erh
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
+	"strings"
 )
 
 // Wrap returns a new error which wraps err.
@@ -22,14 +22,14 @@ func Wrap(err error, a ...interface{}) error {
 		return nil
 	}
 
-	buf := new(bytes.Buffer)
+	var b strings.Builder
 	if len(a) > 0 {
 		format := fmt.Sprintf("%v; ", a[0])
-		fmt.Fprintf(buf, format, a[1:]...)
+		fmt.Fprintf(&b, format, a[1:]...)
 	}
-	buf.WriteString("%w")
-	addFileLine(buf)
-	return fmt.Errorf(buf.String(), err)
+	b.WriteString("%w")
+	addFileLine(&b)
+	return fmt.Errorf(b.String(), err)
 }
 
 // Cause returns the very first error of repeatedly wrapped errors.

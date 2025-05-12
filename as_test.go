@@ -55,11 +55,11 @@ func TestAs(t *testing.T) {
 }
 
 func testAsNoMatch[T error](err error) func(t *testing.T) {
-	return testAs[T](err, assertErrorNoMatch[T]())
+	return testAs(err, assertErrorNoMatch[T]())
 }
 
 func testAsMatchTo[T error](err, matchTo error) func(t *testing.T) {
-	return testAs[T](err, assertErrorMatchTo[T](matchTo))
+	return testAs(err, assertErrorMatchTo[T](matchTo))
 }
 
 func testAs[T error](err error, assertFunc func(*testing.T, T, bool)) func(t *testing.T) {

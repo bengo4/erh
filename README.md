@@ -17,6 +17,8 @@ To solve this problem, the `erh` package provides functions below, similar to [g
 
 Also `erh` provides function `As`, a wrapper of [errors.As](https://pkg.go.dev/errors#As).
 
+The directory depth of the source file recorded in error messages can be changed by `SetSourceDirectoryDepth`.
+
 ## Wrap
 
 The `erh.Wrap` function creates a new error based on the original error. 
@@ -127,3 +129,21 @@ var (
 ok := errors.As(err, &target)
 ```
 
+## SetSourceDirectoryDepth
+
+By default, erh records only the base names of the source files in error messages. You can include additional trailing directory levels by specifying a value with `SetSourceDirectoryDepth`. If you set `erh.FullPath` or a negative value, the full file path will be recorded.
+
+```
+func init() {
+	erh.SetSourceDirectoryDepth(1)
+}
+
+func main() {
+	fmt.Println(erh.Errorf("error happened"))
+}
+```
+
+results:
+```
+error happend[some_directory/main.go:10]
+```
